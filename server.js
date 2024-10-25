@@ -77,6 +77,20 @@ app.get("/build.css", (req, res) => {
     }
 });
 
+app.use((req, res) => {
+    try {
+        res.redirect('/');
+    } catch (error) {
+        const log = {
+            severity: "ERROR",
+            "logging.googleapis.com/trace": req.header("X-Cloud-Trace-Context"),
+            message: `Caught error at 404 middleware: ${error}`
+        }
+        console.log(JSON.stringify(log));
+        res.sendStatus(500);
+    }
+});
+
 app.listen(port, () => {
     const log = {
         severity: "INFO",
