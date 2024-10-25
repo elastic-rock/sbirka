@@ -63,6 +63,20 @@ app.get("/en", (req, res) => {
     }
 });
 
+app.get("/cs", (req, res) => {
+    try {
+        res.sendFile(path.join(__dirname, "www", "cs.html"))
+    } catch (error) {
+        const log = {
+            severity: "ERROR",
+            "logging.googleapis.com/trace": req.header("X-Cloud-Trace-Context"),
+            message: `Caught error at /cs: ${error}`
+        }
+        console.log(JSON.stringify(log));
+        res.sendStatus(500);
+    }
+});
+
 app.get("/build.css", (req, res) => {
     try {
         res.sendFile(path.join(__dirname, "www", "build.css"))
@@ -84,7 +98,7 @@ app.get("/robots.txt", (req, res) => {
         const log = {
             severity: "ERROR",
             "logging.googleapis.com/trace": req.header("X-Cloud-Trace-Context"),
-            message: `Caught error at /build.css: ${error}`
+            message: `Caught error at /robots.txt: ${error}`
         }
         console.log(JSON.stringify(log));
         res.sendStatus(500);
