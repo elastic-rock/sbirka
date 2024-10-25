@@ -1,7 +1,6 @@
-.dockerignore
+.gcloudignore
 .git
 .gitignore
-Dockerfile
-/node_modules
+node_modules/
 tailwind.config.js
 input.css

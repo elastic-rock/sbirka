@@ -77,6 +77,20 @@ app.get("/build.css", (req, res) => {
     }
 });
 
+app.get("/robots.txt", (req, res) => {
+    try {
+        res.sendFile(path.join(__dirname, "www", "robots.txt"))
+    } catch (error) {
+        const log = {
+            severity: "ERROR",
+            "logging.googleapis.com/trace": req.header("X-Cloud-Trace-Context"),
+            message: `Caught error at /build.css: ${error}`
+        }
+        console.log(JSON.stringify(log));
+        res.sendStatus(500);
+    }
+});
+
 app.use((req, res) => {
     try {
         res.redirect('/');
