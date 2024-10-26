@@ -38,7 +38,7 @@ app.use((req, res, next) => {
 app.get("/", (req, res) => {
     try {
         const langHeader = req.headers['accept-language'];
-        const host = req.headers['host'];
+        const host = req.headers['host'].replace("www.", "");
 
         res.set('Vary', 'Accept-Language');
 
@@ -60,7 +60,7 @@ app.get("/", (req, res) => {
 
 app.get("/en", (req, res) => {
     try {
-        const host = req.headers['host'];
+        const host = req.headers['host'].replace("www.", "");
 
         res.send(enData.replace("{{domain}}", host));
     } catch (error) {
@@ -76,7 +76,7 @@ app.get("/en", (req, res) => {
 
 app.get("/cs", (req, res) => {
     try {
-        const host = req.headers['host'];
+        const host = req.headers['host'].replace("www.", "");
 
         res.send(csData.replace("{{domain}}", host));
     } catch (error) {
@@ -121,7 +121,7 @@ app.get("/robots.txt", (req, res) => {
 app.use((req, res) => {
     try {
         const langHeader = req.headers['accept-language'];
-        const host = req.headers['host'];
+        const host = req.headers['host'].replace("www.", "");
 
         res.set('Vary', 'Accept-Language');
 
