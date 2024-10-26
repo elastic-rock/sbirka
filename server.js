@@ -1,8 +1,12 @@
 const express = require("express");
 const app = express();
 const path = require("path");
+const fs = require("fs");
 
 const port = process.env.PORT || 3000;
+
+const csData = fs.readFileSync(path.join(__dirname, "www", "cs.html"), "utf-8");
+const enData = fs.readFileSync(path.join(__dirname, "www", "en.html"), "utf-8");
 
 app.use((req, res, next) => {
     try {
@@ -32,9 +36,12 @@ app.use((req, res, next) => {
 app.get("/", (req, res) => {
     try {
         const langHeader = req.headers['accept-language'];
+        const host = req.headers['host'];
+
+        res.set('Vary', 'Accept-Language');
 
         if (langHeader && langHeader.includes('cs')) {
-            res.sendFile(path.join(__dirname, "www", "cs.html"))
+            res.send(csData.replace("{{domain}}", host));
         } else {
             res.redirect('/en')
         }
@@ -51,7 +58,9 @@ app.get("/", (req, res) => {
 
 app.get("/en", (req, res) => {
     try {
-        res.sendFile(path.join(__dirname, "www", "en.html"))
+        const host = req.headers['host'];
+
+        res.send(enData.replace("{{domain}}", host));
     } catch (error) {
         const log = {
             severity: "ERROR",
@@ -65,7 +74,9 @@ app.get("/en", (req, res) => {
 
 app.get("/cs", (req, res) => {
     try {
-        res.sendFile(path.join(__dirname, "www", "cs.html"))
+        const host = req.headers['host'];
+
+        res.send(csData.replace("{{domain}}", host));
     } catch (error) {
         const log = {
             severity: "ERROR",
