@@ -7,6 +7,8 @@ const port = process.env.PORT || 3000;
 
 const csData = fs.readFileSync(path.join(__dirname, "www", "cs.html"), "utf-8");
 const enData = fs.readFileSync(path.join(__dirname, "www", "en.html"), "utf-8");
+const cs404Data = fs.readFileSync(path.join(__dirname, "www", "404cs.html"), "utf-8");
+const en404Data = fs.readFileSync(path.join(__dirname, "www", "404en.html"), "utf-8");
 
 app.use((req, res, next) => {
     try {
@@ -118,12 +120,21 @@ app.get("/robots.txt", (req, res) => {
 
 app.use((req, res) => {
     try {
-        res.redirect('/');
+        const langHeader = req.headers['accept-language'];
+        const host = req.headers['host'];
+
+        res.set('Vary', 'Accept-Language');
+
+        if (langHeader && langHeader.includes('cs')) {
+            res.status(410).send(cs404Data.replace("{{domain}}", host));
+        } else {
+            res.status(410).send(en404Data.replace("{{domain}}", host));
+        }
     } catch (error) {
         const log = {
             severity: "ERROR",
             "logging.googleapis.com/trace": req.header("X-Cloud-Trace-Context"),
-            message: `Caught error at 404 middleware: ${error}`
+            message: `Caught error at 410 middleware: ${error}`
         }
         console.log(JSON.stringify(log));
         res.sendStatus(500);
