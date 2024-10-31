@@ -1,5 +1,6 @@
 User-agent: Googlebot
 User-agent: Bingbot
+User-agent: SeznamBot
 Allow: /
 
 User-agent: *
