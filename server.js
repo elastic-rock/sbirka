@@ -12,6 +12,11 @@ const en404Data = fs.readFileSync(path.join(__dirname, "www", "404en.html"), "ut
 
 app.use((req, res, next) => {
     try {
+        const userAgent = req.headers['user-agent']
+        if (userAgent && userAgent.includes('Bytespider')) {
+            return res.sendStatus(403);
+        }
+
         res.set("Cache-Control", "no-cache, public");
         res.set("Content-Security-Policy", `default-src 'none'; script-src 'none'; style-src 'self'; require-trusted-types-for 'script';`);
         res.set("X-Content-Type-Options", "nosniff");
