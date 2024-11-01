@@ -43,12 +43,10 @@ app.use((req, res, next) => {
 app.get("/", (req, res) => {
     try {
         const langHeader = req.headers['accept-language'];
-        const host = req.headers['host'].replace("www.", "");
-
         res.set('Vary', 'Accept-Language');
 
         if (langHeader && langHeader.includes('cs')) {
-            res.send(csData.replace("{{domain}}", host));
+            res.redirect('/cs')
         } else {
             res.redirect('/en')
         }
